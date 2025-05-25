@@ -74,7 +74,7 @@ def analyze_vacancies(df):
     return pd.DataFrame(summary_stats)
 
 def store_vacancies(df):
-    engine = create_engine('mysql+mysqlconnector://root:root@localhost:3306/vacancies')
+    engine = create_engine('mysql+mysqlconnector://root:rootpassword@localhost:3306/vacancies')
     
     df.to_sql('job_vacancies', engine, if_exists='replace', index=False)
     

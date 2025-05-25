@@ -1,8 +1,6 @@
--- Create database if it doesn't exist
-CREATE DATABASE IF NOT EXISTS mydatabase;
-USE mydatabase;
+CREATE DATABASE IF NOT EXISTS vacancies;
+USE vacancies;
 
--- Create job_vacancies table
 CREATE TABLE IF NOT EXISTS job_vacancies (
     CODIGO_VACANTE VARCHAR(50) PRIMARY KEY,
     TITULO_VACANTE TEXT,
