@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from datetime import datetime
 import json
 import os
@@ -25,6 +25,10 @@ def process_vacancies(vacancies):
     text_columns = ['TITULO_VACANTE', 'DESCRIPCION_VACANTE', 'CARGO']
     for col in text_columns:
         df[col] = df[col].str.replace('Ã³', 'ó').str.replace('Ã­', 'í')
+    
+    for col in df.columns:
+        if df[col].apply(lambda x: isinstance(x, (list, dict))).any():
+            df[col] = df[col].apply(json.dumps)
     
     return df
 
@@ -77,8 +81,3 @@ def store_vacancies(df):
     engine = create_engine('mysql+mysqlconnector://root:rootpassword@localhost:3306/vacancies')
     
     df.to_sql('job_vacancies', engine, if_exists='replace', index=False)
-    
-    with engine.connect() as conn:
-        conn.execute('CREATE INDEX idx_departamento ON job_vacancies(DEPARTAMENTO)')
-        conn.execute('CREATE INDEX idx_fecha_publicacion ON job_vacancies(FECHA_PUBLICACION)')
-        conn.execute('CREATE INDEX idx_cargo ON job_vacancies(CARGO)')
